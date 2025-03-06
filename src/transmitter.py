@@ -16,18 +16,36 @@ class Transmitter:
 
     def QPSK(self, bits):
         self.modulation = "QPSK"
-        symbols = np.array([(bits[i] * 2 - 1) + 1j * (bits[i + 1] * 2 - 1)
-                            for i in range(0, len(bits), 2)])
-        magnitude = abs(1 + 1j)
-        symbols_normalized = symbols / magnitude
-        self.symbols = symbols_normalized
+        # Ensure even number of bits
+        if len(bits) % 2 != 0:
+            bits = np.append(bits, 0)
+
+        # Create QPSK symbols
+        symbols = []
+        for i in range(0, len(bits), 2):
+            real = 2 * bits[i] - 1
+            imag = 2 * bits[i + 1] - 1
+            symbols.append(complex(real, imag))
+
+        # Normalize to unit power
+        symbols = np.array(symbols) / np.sqrt(2)
+        self.symbols = symbols
         return self.symbols
 
     def QAM16(self, bits):
         self.modulation = "16QAM"
+        # Ensure bits length is multiple of 4
+        if len(bits) % 4 != 0:
+            bits = np.pad(bits, (0, 4 - (len(bits) % 4)), 'constant')
+
         symbols = []
         for i in range(0, len(bits), 4):
-            bit_group = bits[i:i + 4]
+            # Handle case where we might be at the end of the array
+            if i + 4 > len(bits):
+                bit_group = np.pad(bits[i:], (0, 4 - (len(bits) - i)), 'constant')
+            else:
+                bit_group = bits[i:i + 4]
+
             real_part = (2 * bit_group[0] - 1) * (2 + (2 * bit_group[1] - 1))
             imag_part = (2 * bit_group[2] - 1) * (2 + (2 * bit_group[3] - 1))
             symbols.append(complex(real_part, imag_part))
@@ -38,30 +56,59 @@ class Transmitter:
 
     def QAM64(self, bits):
         self.modulation = "64QAM"
+        # Ensure number of bits is multiple of 6
+        if len(bits) % 6 != 0:
+            bits = np.pad(bits, (0, 6 - (len(bits) % 6)), 'constant')
+
         symbols = []
         for i in range(0, len(bits), 6):
-            bit_group = bits[i:i + 6]
+            # Handle case where we might be at the end of the array
+            if i + 6 > len(bits):
+                bit_group = np.pad(bits[i:], (0, 6 - (len(bits) - i)), 'constant')
+            else:
+                bit_group = bits[i:i + 6]
+
+            # Extract 3 bits for real and 3 bits for imaginary
             real_bits = bit_group[0:3]
             imag_bits = bit_group[3:6]
 
-            real_part = (4 * real_bits[0] - 2) + (2 * real_bits[1] - 1) + (real_bits[2] - 0.5)
-            imag_part = (4 * imag_bits[0] - 2) + (2 * imag_bits[1] - 1) + (imag_bits[2] - 0.5)
+            # Map 3 bits to 8 possible levels (-7, -5, -3, -1, 1, 3, 5, 7)
+            real_val = (4 * real_bits[0] + 2 * real_bits[1] + real_bits[2]) * 2 - 7
+            imag_val = (4 * imag_bits[0] + 2 * imag_bits[1] + imag_bits[2]) * 2 - 7
 
-            symbols.append(complex(real_part, imag_part))
+            symbols.append(complex(real_val, imag_val))
 
-        symbols = np.array(symbols)
-        self.symbols = symbols / np.sqrt(42)
+        # Normalize to unit average power
+        symbols = np.array(symbols) / np.sqrt(42)  # 42 is average power of 64QAM
+        self.symbols = symbols
         return self.symbols
 
     def apply_beamforming(self, symbols, angle_degrees):
         """Apply beamforming weights for desired transmission angle"""
         angle_rad = np.deg2rad(angle_degrees)
-        d = 0.5
+        d = 0.5  # Half wavelength antenna spacing
         k = 2 * np.pi
         n = np.arange(self.num_antennas)
+
+        # Calculate steering vector
         steering_vector = np.exp(1j * k * d * n * np.sin(angle_rad))
+
+        # Normalize steering vector
         steering_vector = steering_vector / np.sqrt(self.num_antennas)
-        beamformed_signals = np.outer(symbols, steering_vector)
+
+        # Handle different input dimensions
+        if len(symbols.shape) == 1:
+            # For 1D symbols, apply beamforming
+            beamformed_signals = np.zeros((len(symbols), self.num_antennas), dtype=complex)
+            for i in range(len(symbols)):
+                beamformed_signals[i, :] = symbols[i] * steering_vector
+        else:
+            # For 2D case (e.g. OFDM)
+            beamformed_signals = np.zeros((symbols.shape[0], symbols.shape[1], self.num_antennas), dtype=complex)
+            for i in range(symbols.shape[0]):
+                for j in range(symbols.shape[1]):
+                    beamformed_signals[i, j, :] = symbols[i, j] * steering_vector
+
         return beamformed_signals
 
     def plot_radiation_pattern(self, weights):
@@ -113,13 +160,15 @@ class Transmitter:
 
     def transmit(self, beam_angle=None):
         # Modulate the bits
-        if self.modulation == "BPSK":
+        mod_upper = self.modulation.upper()
+
+        if mod_upper == "BPSK":
             symbols = self.BPSK(self.bits)
-        elif self.modulation == "QPSK":
+        elif mod_upper == "QPSK":
             symbols = self.QPSK(self.bits)
-        elif self.modulation == "16QAM":
+        elif mod_upper in ["16QAM", "QAM16"]:
             symbols = self.QAM16(self.bits)
-        elif self.modulation == "64QAM":
+        elif mod_upper in ["64QAM", "QAM64"]:
             symbols = self.QAM64(self.bits)
         else:
             raise Exception(f"Modulation: {self.modulation} not supported")

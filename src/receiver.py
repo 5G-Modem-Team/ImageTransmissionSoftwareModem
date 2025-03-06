@@ -13,97 +13,102 @@ class Receiver:
         # Ensure received_signal is 2D
         if len(received_signal.shape) == 3:
             # For OFDM case, process each time sample
-            equalized = np.zeros_like(received_signal)
+            equalized = np.zeros((received_signal.shape[0], received_signal.shape[1]), dtype=complex)
             for i in range(received_signal.shape[0]):
                 for j in range(received_signal.shape[1]):
                     H_pinv = pinv(channel_matrix)
-                    equalized[i, j, :] = np.dot(received_signal[i, j, :], H_pinv.T)
+                    equalized[i, j] = np.dot(H_pinv[0, :], received_signal[i, j, :])
             return equalized
         else:
-            # Calculate pseudo-inverse of channel matrix
-            H_pinv = pinv(channel_matrix)
-            # Apply equalizer
-            equalized_signal = np.dot(received_signal, H_pinv.T)
-            return equalized_signal
+            # Check if we're dealing with a multi-antenna signal (MIMO case)
+            if len(received_signal.shape) > 1 and received_signal.shape[1] > 1:
+                # Calculate pseudo-inverse of channel matrix
+                H_pinv = pinv(channel_matrix)
+                # Apply equalizer (transpose properly for matrix multiplication)
+                equalized_signal = np.zeros(received_signal.shape[0], dtype=complex)
+                for i in range(received_signal.shape[0]):
+                    # Use the first row of H_pinv for simplicity
+                    equalized_signal[i] = np.dot(H_pinv[0, :], received_signal[i, :])
+                return equalized_signal.reshape(-1, 1)
+            else:
+                # For SISO case
+                return received_signal
 
     def demodulate_BPSK(self, symbols):
         """Demodulate BPSK symbols"""
-        return (np.real(symbols) > 0).astype(int)
+        # Ensure symbols is flattened for consistent processing
+        symbols_flat = symbols.flatten()
+        return (np.real(symbols_flat) > 0).astype(int)
 
     def demodulate_QPSK(self, symbols):
         """Demodulate QPSK symbols"""
-        # Flatten array if it's multi-dimensional
-        symbols = symbols.flatten()
+        # Ensure symbols is flattened for consistent processing
+        symbols_flat = symbols.flatten()
+
         # Get real and imaginary components
-        real_bits = (np.real(symbols) > 0).astype(int)
-        imag_bits = (np.imag(symbols) > 0).astype(int)
+        real_bits = (np.real(symbols_flat) > 0).astype(int)
+        imag_bits = (np.imag(symbols_flat) > 0).astype(int)
+
         # Interleave real and imaginary bits
-        bits = np.zeros(2 * len(symbols), dtype=int)
+        bits = np.zeros(2 * len(symbols_flat), dtype=int)
         bits[0::2] = real_bits
         bits[1::2] = imag_bits
         return bits
 
-    def demodulate_QAM16(self, symbols):
-        """Demodulate 16-QAM symbols"""
-        # Flatten array if it's multi-dimensional
-        symbols = symbols.flatten()
+    def demodulate_QAM64(self, symbols):
+        """Demodulate 64-QAM symbols"""
+        # Ensure symbols is flattened
+        symbols_flat = symbols.flatten()
 
         # Scale symbol back
-        symbols = symbols * np.sqrt(10)
+        symbols_flat = symbols_flat * np.sqrt(42)
 
         # Get real and imaginary parts
-        real_parts = np.real(symbols)
-        imag_parts = np.imag(symbols)
+        real_parts = np.real(symbols_flat)
+        imag_parts = np.imag(symbols_flat)
 
-        # Decode real parts (2 bits per real part)
+        # Map to bit values (inverse of transmitter mapping)
+        # Quantize to nearest valid level
+        levels = np.array([-7, -5, -3, -1, 1, 3, 5, 7])
+        real_indices = np.argmin(np.abs(real_parts.reshape(-1, 1) - levels), axis=1)
+        imag_indices = np.argmin(np.abs(imag_parts.reshape(-1, 1) - levels), axis=1)
+
+        # Convert indices to 3-bit binary representation
+        real_bits = ((real_indices.reshape(-1, 1) & (1 << np.arange(3))) > 0).astype(int)[:, ::-1]
+        imag_bits = ((imag_indices.reshape(-1, 1) & (1 << np.arange(3))) > 0).astype(int)[:, ::-1]
+
+        # Combine all bits
+        all_bits = np.column_stack((real_bits, imag_bits)).flatten()
+
+        return all_bits
+
+    def demodulate_QAM16(self, symbols):
+        """Demodulate 16-QAM symbols"""
+        # Ensure symbols is flattened
+        symbols_flat = symbols.flatten()
+
+        # Scale symbol back
+        symbols_flat = symbols_flat * np.sqrt(10)
+
+        # Get real and imaginary parts
+        real_parts = np.real(symbols_flat)
+        imag_parts = np.imag(symbols_flat)
+
+        # Map to bit values (inverse of transmitter mapping)
+        # For real part: first bit is sign, second bit is magnitude
         real_bits1 = (real_parts > 0).astype(int)
         real_bits2 = (np.abs(real_parts) > 2).astype(int)
 
-        # Decode imaginary parts (2 bits per imaginary part)
+        # For imaginary part: first bit is sign, second bit is magnitude
         imag_bits1 = (imag_parts > 0).astype(int)
         imag_bits2 = (np.abs(imag_parts) > 2).astype(int)
 
         # Combine bits in correct order
-        bits = np.zeros(4 * len(symbols), dtype=int)
+        bits = np.zeros(4 * len(symbols_flat), dtype=int)
         bits[0::4] = real_bits1
         bits[1::4] = real_bits2
         bits[2::4] = imag_bits1
         bits[3::4] = imag_bits2
-
-        return bits
-
-    def demodulate_QAM64(self, symbols):
-        """Demodulate 64-QAM symbols"""
-        # Flatten array if it's multi-dimensional
-        symbols = symbols.flatten()
-
-        # Scale symbol back
-        symbols = symbols * np.sqrt(42)
-
-        # Get real and imaginary parts
-        real_parts = np.real(symbols)
-        imag_parts = np.imag(symbols)
-
-        # Decode real parts (3 bits per real part)
-        real_bits1 = (real_parts > 0).astype(int)
-        abs_real = np.abs(real_parts)
-        real_bits2 = (abs_real > 2).astype(int)
-        real_bits3 = (abs_real % 2 > 1).astype(int)
-
-        # Decode imaginary parts (3 bits per imaginary part)
-        imag_bits1 = (imag_parts > 0).astype(int)
-        abs_imag = np.abs(imag_parts)
-        imag_bits2 = (abs_imag > 2).astype(int)
-        imag_bits3 = (abs_imag % 2 > 1).astype(int)
-
-        # Combine bits in correct order
-        bits = np.zeros(6 * len(symbols), dtype=int)
-        bits[0::6] = real_bits1
-        bits[1::6] = real_bits2
-        bits[2::6] = real_bits3
-        bits[3::6] = imag_bits1
-        bits[4::6] = imag_bits2
-        bits[5::6] = imag_bits3
 
         return bits
 
@@ -114,14 +119,19 @@ class Receiver:
 
     def constellation_plot(self, symbols, title="Received Constellation"):
         """Plot constellation diagram of received symbols"""
-        # If symbols is 3D array (OFDM case), take first symbol
+        # Flatten or extract symbols for plotting
         if len(symbols.shape) > 2:
-            symbols = symbols[0, :, 0]
-        elif len(symbols.shape) > 1:
-            symbols = symbols[:, 0]
+            # OFDM case
+            symbols_plot = symbols[0, :, 0]
+        elif len(symbols.shape) > 1 and symbols.shape[1] > 1:
+            # MIMO case, use first antenna
+            symbols_plot = symbols[:, 0]
+        else:
+            # Already flattened or single antenna
+            symbols_plot = symbols.flatten()
 
         plt.figure(figsize=(8, 8))
-        plt.plot(np.real(symbols), np.imag(symbols), '.')
+        plt.plot(np.real(symbols_plot), np.imag(symbols_plot), '.')
         plt.xlim(-2, 2)
         plt.ylim(-2, 2)
         plt.title(title)
@@ -138,43 +148,17 @@ class Receiver:
             equalized_signal = received_signal
 
         # Demodulate based on modulation scheme
-        if self.modulation == "BPSK":
+        mod_upper = self.modulation.upper()
+
+        if mod_upper == "BPSK":
             bits = self.demodulate_BPSK(equalized_signal)
-        elif self.modulation == "QPSK":
+        elif mod_upper == "QPSK":
             bits = self.demodulate_QPSK(equalized_signal)
-        elif self.modulation == "16QAM":
+        elif mod_upper in ["16QAM", "QAM16"]:
             bits = self.demodulate_QAM16(equalized_signal)
-        elif self.modulation == "64QAM":
+        elif mod_upper in ["64QAM", "QAM64"]:
             bits = self.demodulate_QAM64(equalized_signal)
         else:
             raise ValueError(f"Unsupported modulation scheme: {self.modulation}")
 
         return bits, equalized_signal
-
-
-if __name__ == "__main__":
-    # Test the receiver
-    # Generate test data
-    num_symbols = 1000
-    original_bits = np.random.randint(0, 2, num_symbols * 2)  # For QPSK
-
-    # Create test signal (QPSK)
-    test_symbols = np.array([(original_bits[i] * 2 - 1) + 1j * (original_bits[i + 1] * 2 - 1)
-                             for i in range(0, len(original_bits), 2)]) / np.sqrt(2)
-
-    # Add some noise
-    noisy_symbols = test_symbols + 0.1 * (np.random.randn(len(test_symbols)) +
-                                          1j * np.random.randn(len(test_symbols)))
-
-    # Create receiver
-    rx = Receiver(modulation="QPSK")
-
-    # Receive and demodulate
-    received_bits, equalized_symbols = rx.receive(noisy_symbols)
-
-    # Calculate BER
-    ber = rx.calculate_ber(original_bits, received_bits)
-    print(f"Bit Error Rate: {ber:.6f}")
-
-    # Plot constellation
-    rx.constellation_plot(equalized_symbols, "Received QPSK Constellation")

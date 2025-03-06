@@ -1,24 +1,22 @@
 # Image Transmission Software Modem  
 
-A software implementation of digital image transmission system with multiple modulation schemes and MIMO techniques.
-
-## Features
-- Multiple modulation schemes (BPSK, QPSK, 16QAM, 64QAM)
-- OFDM implementation
-- Beamforming with MIMO
-- Adaptive modulation based on channel conditions
-- Channel simulation with AWGN and Rayleigh fading
-
-## Requirements
-- Python 3.x
-- NumPy
-- Matplotlib
-- PIL
-- SciPy
-
-## Usage
+## How to Run Tests
+### 1. Basic Modem Testing
+This script tests individual modulation schemes (BPSK, QPSK, 16QAM, 64QAM) under different SNR levels.
 ```bash
-python main.py [--modulation QPSK] [--snr 20] [--beam-angle 30] [--use-ofdm] [--use-adaptive]
+python test_basic_modem.py
 ```
+- Outputs BER values for each modulation scheme.
+- Helps analyze the impact of SNR on different modulation types.
+
+### 2. Full System Testing
+This script runs a full pipeline including modulation, OFDM, beamforming, channel effects, and demodulation.
+```bash
+python test_system.py
+```
+- Tests multiple images with different complexity levels.
+- Evaluates system-wide BER, PSNR, and SSIM metrics.
+- Simulates realistic wireless transmission scenarios.
+
 
 ## 🚀 Let's Go Team! 💪  

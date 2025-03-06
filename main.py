@@ -151,6 +151,42 @@ class ImageTransmissionSystem:
 
         return received_image, ber, quality_metrics
 
+    def test_basic_modulation(self, modulation="QPSK", snr_db=20):
+        """Test basic modulation without beamforming or OFDM"""
+        # Generate random bits
+        num_bits = 10000
+        if modulation == "QPSK":
+            bits = np.random.randint(0, 2, num_bits - (num_bits % 2))  # Ensure even number
+        elif modulation == "16QAM":
+            bits = np.random.randint(0, 2, num_bits - (num_bits % 4))  # Multiple of 4
+        elif modulation == "64QAM":
+            bits = np.random.randint(0, 2, num_bits - (num_bits % 6))  # Multiple of 6
+        else:  # BPSK
+            bits = np.random.randint(0, 2, num_bits)
+
+        # Initialize components
+        tx = Transmitter(bits, modulation=modulation, num_antennas=1)
+        rx = Receiver(modulation=modulation, num_antennas=1)
+
+        # Modulate (no beamforming)
+        tx_symbols = tx.transmit(beam_angle=None)
+
+        # Simple AWGN channel
+        signal_power = np.mean(np.abs(tx_symbols) ** 2)
+        noise_power = signal_power / (10 ** (snr_db / 10))
+        noise = np.sqrt(noise_power / 2) * (np.random.randn(*tx_symbols.shape) +
+                                            1j * np.random.randn(*tx_symbols.shape))
+        rx_symbols = tx_symbols + noise
+
+        # Demodulate
+        rx_bits, _ = rx.receive(rx_symbols)
+
+        # Calculate BER
+        min_len = min(len(bits), len(rx_bits))
+        ber = np.mean(bits[:min_len] != rx_bits[:min_len])
+        print(f"Basic {modulation} test - SNR: {snr_db}dB, BER: {ber:.6f}")
+        return ber
+
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Image Transmission Software Modem')
@@ -173,8 +209,61 @@ def parse_args():
     return parser.parse_args()
 
 
+def test_basic_modulation(self, modulation="QPSK", snr_db=20):
+    """Test basic modulation without beamforming or OFDM"""
+    # Generate random bits
+    num_bits = 1000
+    if modulation == "QPSK":
+        bits = np.random.randint(0, 2, num_bits - (num_bits % 2))  # Ensure even number
+    elif modulation == "16QAM":
+        bits = np.random.randint(0, 2, num_bits - (num_bits % 4))  # Multiple of 4
+    elif modulation == "64QAM":
+        bits = np.random.randint(0, 2, num_bits - (num_bits % 6))  # Multiple of 6
+    else:  # BPSK
+        bits = np.random.randint(0, 2, num_bits)
+
+    # Initialize components
+    tx = Transmitter(bits, modulation=modulation, num_antennas=1)
+    rx = Receiver(modulation=modulation, num_antennas=1)
+
+    # Modulate (no beamforming)
+    tx_symbols = tx.transmit(beam_angle=None)
+
+    # Simple AWGN channel
+    noise_power = 10 ** (-snr_db / 10)
+    noise = np.sqrt(noise_power / 2) * (np.random.randn(*tx_symbols.shape) +
+                                        1j * np.random.randn(*tx_symbols.shape))
+    rx_symbols = tx_symbols + noise
+
+    # Demodulate
+    rx_bits, _ = rx.receive(rx_symbols)
+
+    # Calculate BER
+    min_len = min(len(bits), len(rx_bits))
+    ber = np.mean(bits[:min_len] != rx_bits[:min_len])
+    print(f"Basic {modulation} test - SNR: {snr_db}dB, BER: {ber:.6f}")
+    return ber
+
+
 def main():
     args = parse_args()
+
+    # Add a test mode flag
+    parser = argparse.ArgumentParser(description='Image Transmission Software Modem')
+    parser.add_argument('--test-mode', action='store_true',
+                        help='Run in test mode to verify system components')
+    args = parser.parse_args()
+
+    # Create system instance
+    system = ImageTransmissionSystem(num_tx_antennas=4, num_rx_antennas=4)
+
+    if args.test_mode:
+        print("Running component tests...")
+        # Test basic modulation schemes
+        for mod in ["BPSK", "QPSK", "16QAM", "64QAM"]:
+            for snr in [5, 10, 15, 20, 25]:
+                system.test_basic_modulation(modulation=mod, snr_db=snr)
+        return
 
     # Create output directory if it doesn't exist
     os.makedirs(args.output_dir, exist_ok=True)
@@ -261,6 +350,11 @@ def main():
     print(f"- {args.output_dir}/tx_constellation_*.png : Transmit constellations")
     print(f"- {args.output_dir}/rx_constellation_*.png : Receive constellations")
     print(f"- {args.output_dir}/radiation_pattern_*.png : Beamforming radiation patterns")
+
+    # Test basic modulation schemes
+    for mod in ["BPSK", "QPSK", "16QAM", "64QAM"]:
+        for snr in [5, 10, 15, 20]:
+            system.test_basic_modulation(modulation=mod, snr_db=snr)
 
 
 if __name__ == "__main__":

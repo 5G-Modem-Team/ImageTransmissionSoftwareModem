@@ -8,11 +8,11 @@ class OFDMProcessor:
         self.ncarriers = ncarriers  # Number of data carriers
         self.nsym = self.nfft + self.ncp  # Total symbol length
 
-        # Generate carrier indices
+        # Generate carrier indices (DC null and guard bands)
         self.carrier_indices = np.concatenate([
             np.arange(-ncarriers // 2, 0),
             np.arange(1, ncarriers // 2 + 1)
-        ]) + nfft // 2
+        ]) % nfft  # Use modulo to avoid negative indices
 
     def modulate(self, symbols):
         """
@@ -26,16 +26,19 @@ class OFDMProcessor:
         # Pad the input symbols if necessary
         padded_length = n_symbols * self.ncarriers
         if len(symbols) < padded_length:
-            symbols = np.pad(symbols, (0, padded_length - len(symbols)))
+            symbols = np.pad(symbols, (0, padded_length - len(symbols)), 'constant')
 
         # Reshape input for OFDM symbols
-        symbols = symbols.reshape(n_symbols, -1)
+        symbols = symbols.reshape(n_symbols, self.ncarriers)
 
         # Prepare OFDM symbols in frequency domain
         ofdm_symbols = np.zeros((n_symbols, self.nfft), dtype=complex)
-        ofdm_symbols[:, self.carrier_indices] = symbols[:, :len(self.carrier_indices)]
 
-        # IFFT to convert to time domain
+        # Place data on active carriers
+        for i in range(n_symbols):
+            ofdm_symbols[i, self.carrier_indices] = symbols[i, :]
+
+        # IFFT to convert to time domain (apply normalization)
         time_signal = np.fft.ifft(ofdm_symbols, axis=1) * np.sqrt(self.nfft)
 
         # Add cyclic prefix
@@ -51,18 +54,19 @@ class OFDMProcessor:
         Output: demodulated symbols from subcarriers
         """
         # Calculate number of complete OFDM symbols
-        n_symbols = len(received_signal) // self.nsym
+        symbol_length = self.nfft + self.ncp
+        n_symbols = len(received_signal) // symbol_length
 
         # Truncate signal to complete symbols
-        received_signal = received_signal[:n_symbols * self.nsym]
+        received_signal = received_signal[:n_symbols * symbol_length]
 
         # Reshape into OFDM symbols
-        received_signal = received_signal.reshape(n_symbols, self.nsym)
+        received_signal = received_signal.reshape(n_symbols, symbol_length)
 
         # Remove cyclic prefix
         received_signal = received_signal[:, self.ncp:]
 
-        # FFT to convert back to frequency domain
+        # FFT to convert back to frequency domain (apply normalization)
         freq_signal = np.fft.fft(received_signal, axis=1) / np.sqrt(self.nfft)
 
         # Extract data from subcarriers
@@ -72,33 +76,45 @@ class OFDMProcessor:
 
 
 class OFDMBeamformer:
-    def __init__(self, n_antennas, nfft=64):
+    def __init__(self, n_antennas, nfft=64, ncp=16):
         self.n_antennas = n_antennas
         self.nfft = nfft
+        self.ncp = ncp
+        self.nsym = nfft + ncp  # Total OFDM symbol length
 
-    def calculate_steering_vector(self, angle_degrees, freq_idx):
-        """Calculate steering vector for specific frequency and angle"""
+    def calculate_steering_vector(self, angle_degrees):
+        """Calculate steering vector for specific angle"""
         angle_rad = np.deg2rad(angle_degrees)
-        freq_norm = (freq_idx - self.nfft // 2) / self.nfft
+        d = 0.5  # Half wavelength antenna spacing
+        k = 2 * np.pi
         n = np.arange(self.n_antennas)
-        phase_shifts = 2 * np.pi * freq_norm * n * np.sin(angle_rad)
-        return np.exp(1j * phase_shifts)
+        steering_vector = np.exp(1j * k * d * n * np.sin(angle_rad))
+
+        # Normalize steering vector
+        steering_vector = steering_vector / np.sqrt(self.n_antennas)
+
+        return steering_vector
 
     def apply_beamforming(self, ofdm_signal, angle_degrees):
         """Apply beamforming weights to OFDM symbols"""
         # Calculate number of OFDM symbols
-        nsym = self.nfft + 16  # OFDM symbol length (FFT size + CP)
-        n_symbols = len(ofdm_signal) // nsym
+        n_symbols = len(ofdm_signal) // self.nsym
+
+        # Ensure we have complete symbols
+        ofdm_signal = ofdm_signal[:n_symbols * self.nsym]
 
         # Reshape signal into OFDM symbols
-        symbols = ofdm_signal[:n_symbols * nsym].reshape(n_symbols, nsym)
+        symbols = ofdm_signal.reshape(n_symbols, self.nsym)
+
+        # Calculate steering vector
+        steering_vector = self.calculate_steering_vector(angle_degrees)
 
         # Initialize output array for all antennas
-        beamformed = np.zeros((n_symbols, nsym, self.n_antennas), dtype=complex)
+        beamformed = np.zeros((n_symbols, self.nsym, self.n_antennas), dtype=complex)
 
-        # Apply beamforming for each time sample
+        # Apply beamforming for each time sample and OFDM symbol
         for i in range(n_symbols):
-            steering_vector = self.calculate_steering_vector(angle_degrees, i % self.nfft)
-            beamformed[i, :, :] = np.outer(symbols[i, :], steering_vector)
+            for j in range(self.nsym):
+                beamformed[i, j, :] = symbols[i, j] * steering_vector
 
         return beamformed
