@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 class Channel:
@@ -48,7 +49,7 @@ class Channel:
             # Identity channel matrix (no fading)
             self.H = np.eye(self.num_rx_antennas, self.num_tx_antennas)
 
-    def add_awgn(self, signal, snr_db):
+    def add_awgn(self, signal, snr_db, plot=False):
         """
         Add Additive White Gaussian Noise to the signal with reduced noise power
 
@@ -66,9 +67,6 @@ class Channel:
         snr_linear = 10 ** (snr_db / 10)
         noise_power = signal_power / snr_linear
 
-        # Reduce noise power by 20% for better performance
-        noise_power *= 0.8
-
         # Generate complex noise
         if isinstance(signal, np.ndarray):
             noise = np.sqrt(noise_power / 2) * (np.random.randn(*signal.shape) +
@@ -76,6 +74,17 @@ class Channel:
         else:
             # Handle scalar case
             noise = np.sqrt(noise_power / 2) * (np.random.randn() + 1j * np.random.randn())
+
+        if plot:
+            fig, axs = plt.subplots(2)
+            fig.suptitle(f"AWGN Noise at {snr_db}dB SNR")
+            axs[0].plot(np.real(noise))
+            axs[1].plot(np.imag(noise))
+            axs[0].set_ylabel("Real Magnitude")
+            axs[1].set_ylabel("Imaginary Magnitude")
+            axs[1].set_xlabel("Bit Index")
+            fig.savefig(f"results/awgn_noise_{snr_db}dB.png")
+            plt.close(fig)
 
         return signal + noise
 
@@ -134,3 +143,11 @@ class Channel:
     def get_channel_matrix(self):
         """Return the current channel matrix"""
         return self.H
+    
+
+if __name__ == "__main__":
+    # Example usage of the Channel class
+    num_bits = 1000
+    bits = np.random.randint(0, 2, num_bits)
+    ch = Channel(num_tx_antennas=1,num_rx_antennas=1,channel_type='awgn',seed=42)
+    ch.add_awgn(signal = bits, snr_db = 10, plot=True)

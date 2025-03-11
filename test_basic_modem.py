@@ -5,9 +5,10 @@ matplotlib.use('Agg')  # Use non-interactive backend
 import matplotlib.pyplot as plt
 from src.transmitter import Transmitter
 from src.receiver import Receiver
+from src.channel import Channel
 
 
-def test_modulation_scheme(modulation, num_bits=10000, snr_range=[0, 5, 10, 15, 20, 25, 30]):
+def test_modulation_scheme(modulation, num_bits=10000, snr_range=[0, 5, 10, 15, 20, 25, 30], plot_noise = True):
     """Test a modulation scheme across different SNR values"""
     # Adjust bit count to match modulation scheme
     if modulation == "QPSK":
@@ -30,11 +31,8 @@ def test_modulation_scheme(modulation, num_bits=10000, snr_range=[0, 5, 10, 15, 
         tx_symbols = tx.transmit(beam_angle=None)
 
         # Simple AWGN channel
-        signal_power = np.mean(np.abs(tx_symbols) ** 2)
-        noise_power = signal_power / (10 ** (snr_db / 10))
-        noise = np.sqrt(noise_power / 2) * (np.random.randn(*tx_symbols.shape) +
-                                            1j * np.random.randn(*tx_symbols.shape))
-        rx_symbols = tx_symbols + noise
+        awgn_ch = Channel(num_tx_antennas=1, num_rx_antennas=1, channel_type='awgn', seed=42)
+        rx_symbols = awgn_ch.add_awgn(tx_symbols, snr_db, plot=True)
 
         # Plot constellation for one specific SNR (e.g., 15dB)
         if snr_db == 15:
