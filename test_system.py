@@ -78,7 +78,7 @@ def test_ofdm(num_bits=10000, snr_db=20):
     plt.title("Received Symbols after OFDM")
     plt.axis('equal')
 
-    plt.savefig("ofdm_test.png")
+    plt.savefig("results/ofdm_test.png")
     plt.close()
 
     return ber
@@ -102,7 +102,7 @@ def test_beamforming_channel(num_bits=10000, snr_db=20, beam_angle=30):
     # Plot radiation pattern
     plt.figure(figsize=(10, 6))
     tx.plot_radiation_pattern(tx_symbols)
-    plt.savefig("beamforming_pattern.png")
+    plt.savefig("results/beamforming_pattern.png")
     plt.close()
 
     # Apply channel effects
@@ -131,7 +131,7 @@ def test_beamforming_channel(num_bits=10000, snr_db=20, beam_angle=30):
         plt.grid(True)
         plt.title(f"Received Constellation after Beamforming and Channel")
         plt.axis('equal')
-        plt.savefig("beamforming_channel_constellation.png")
+        plt.savefig("results/beamforming_channel_constellation.png")
         plt.close()
 
         return ber
@@ -175,7 +175,7 @@ def test_adaptive_modulation(snr_range=[5, 10, 15, 20, 25, 30]):
     plt.ylabel("Channel Capacity (bits/s/Hz)")
 
     plt.tight_layout()
-    plt.savefig("adaptive_modulation.png")
+    plt.savefig("results/adaptive_modulation.png")
     plt.close()
 
     return results
@@ -344,7 +344,7 @@ def test_full_system(input_image=None, use_ofdm=True, use_adaptive=True, beam_an
         rx_img_array = np.zeros(orig_shape, dtype=np.uint8)
 
     rx_image = Image.fromarray(rx_img_array)
-    rx_image.save(f"received_{image_description}.png")
+    rx_image.save(f"results/received_{image_description}.png")
 
     # Calculate image quality metrics
     quality = analyze_image_quality(img_array, rx_img_array)
@@ -365,7 +365,7 @@ def test_full_system(input_image=None, use_ofdm=True, use_adaptive=True, beam_an
     plt.axis('off')
 
     plt.tight_layout()
-    plt.savefig(f"comparison_{image_description}.png")
+    plt.savefig(f"results/comparison_{image_description}.png")
     plt.close()
 
     return ber, quality, image_description

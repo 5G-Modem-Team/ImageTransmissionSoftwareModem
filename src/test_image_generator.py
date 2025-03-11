@@ -91,15 +91,15 @@ def generate_all_test_images():
 
         # Simple image
         simple = generate_simple_image(size)
-        simple.save(f"simple_{size_str}.png")
+        simple.save(f"test_images/simple_{size_str}.png")
 
         # Medium image
         medium = generate_medium_image(size)
-        medium.save(f"medium_{size_str}.png")
+        medium.save(f"test_images/medium_{size_str}.png")
 
         # Complex image
         complex_img = generate_complex_image(size)
-        complex_img.save(f"complex_{size_str}.png")
+        complex_img.save(f"test_images/complex_{size_str}.png")
 
     print("Generated all test images")
     return [

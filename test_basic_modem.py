@@ -45,7 +45,7 @@ def test_modulation_scheme(modulation, num_bits=10000, snr_range=[0, 5, 10, 15, 
             plt.xlabel("Real")
             plt.ylabel("Imaginary")
             plt.axis('equal')
-            plt.savefig(f"{modulation}_constellation_{snr_db}dB.png")
+            plt.savefig(f"results/{modulation}_constellation_{snr_db}dB.png")
             plt.close()  # Close the figure to free memory
 
         # Demodulate
@@ -73,7 +73,7 @@ plt.xlabel("SNR (dB)")
 plt.ylabel("Bit Error Rate (BER)")
 plt.title("BER vs SNR for Different Modulation Schemes")
 plt.legend()
-plt.savefig("ber_vs_snr.png")
+plt.savefig("results/ber_vs_snr.png")
 plt.close()  # Close the figure to prevent hanging
 
 print("All tests completed. Check the generated .png files for plots.")
