@@ -257,7 +257,14 @@ def decode_with_error_correction(encoded_bits):
 
 
 def calculate_psnr(original, reconstructed):
-    """Calculate Peak Signal-to-Noise Ratio"""
+    """Calculate Peak Signal-to-Noise Ratio with shape handling"""
+    # Ensure consistent shapes
+    min_height = min(original.shape[0], reconstructed.shape[0])
+    min_width = min(original.shape[1], reconstructed.shape[1])
+
+    original = original[:min_height, :min_width]
+    reconstructed = reconstructed[:min_height, :min_width]
+
     mse = np.mean((original - reconstructed) ** 2)
     if mse == 0:
         return float('inf')
@@ -267,12 +274,16 @@ def calculate_psnr(original, reconstructed):
 
 
 def calculate_ssim(original, reconstructed, window_size=11):
-    """Calculate Structural Similarity Index (SSIM)"""
+    """Calculate Structural Similarity Index (SSIM) with shape handling"""
     C1 = (0.01 * 255) ** 2
     C2 = (0.03 * 255) ** 2
 
-    original = original.astype(float)
-    reconstructed = reconstructed.astype(float)
+    # Ensure consistent shapes
+    min_height = min(original.shape[0], reconstructed.shape[0])
+    min_width = min(original.shape[1], reconstructed.shape[1])
+
+    original = original[:min_height, :min_width].astype(float)
+    reconstructed = reconstructed[:min_height, :min_width].astype(float)
 
     # Compute means
     mu1 = uniform_filter(original, window_size)
@@ -291,12 +302,12 @@ def calculate_ssim(original, reconstructed, window_size=11):
 
 
 def analyze_image_quality(original, reconstructed):
-    """Comprehensive image quality analysis"""
+    """Comprehensive image quality analysis with robust shape handling"""
     return {
         'psnr': calculate_psnr(original, reconstructed),
         'ssim': calculate_ssim(original, reconstructed),
-        'mse': np.mean((original - reconstructed) ** 2),
-        'mae': np.mean(np.abs(original - reconstructed))
+        'mse': np.mean((original[:reconstructed.shape[0], :reconstructed.shape[1]] - reconstructed) ** 2),
+        'mae': np.mean(np.abs(original[:reconstructed.shape[0], :reconstructed.shape[1]] - reconstructed))
     }
 
 

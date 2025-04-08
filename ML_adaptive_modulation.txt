@@ -1,0 +1,867 @@
+
+=== Running Improved ML Image Transmission System ===
+
+=== Running Basic Validation Tests ===
+Test Simple - BER: 0.494385
+Original image size: (64, 64)
+Original array shape: (64, 64)
+Bit stream length: 32768
+Received bits length: 32768
+BER: 0.417328
+Packed bytes length: 4096, Expected shape product: 4096
+Original image dimensions: (32, 32)
+Array shape: (32, 32)
+Bit stream length: 8192
+Transmitted symbols shape: (8192,)
+OFDM signal length: 12720
+Received symbols length: 8164
+Received bits length: 8164
+BER: 0.251225
+Bit length ratio (rx/tx): 0.9966
+Missing 28 bits (0.34% of original)
+
+=== Basic Test Results ===
+Simple test BER: 0.494385
+Direct test BER: 0.417328, PSNR: 28.78
+OFDM debug BER: 0.251225
+
+=== Testing OFDM Processing ===
+Applying OFDM modulation...
+Applying OFDM demodulation...
+Average Symbol Error: 0.002557
+OFDM BER: 0.000000
+
+=== Testing Beamforming and Channel ===
+Applying beamforming at 30 degrees...
+Applying channel effects...
+tx_symbols shape: (5000, 4)
+rx_symbols shape: (5000, 4)
+channel matrix shape: (4, 4)
+Beamforming + Channel BER: 0.000000
+
+=== Testing Adaptive Modulation ===
+Training enhanced adaptive modulation model with realistic channels...
+Training with 4400 samples, validating with 1100 samples
+Enhanced model trained - Training accuracy: 1.0000, Validation accuracy: 0.9691
+Feature ranking for modulation selection:
+1. SNR (0.2924)
+2. Channel Capacity (0.1732)
+3. Condition Number (0.1501)
+4. Data Size (0.1043)
+5. Channel Gain (0.0948)
+6. Is Image (0.0781)
+7. Det Real (0.0386)
+8. Channel Std (0.0376)
+9. Det Imag (0.0310)
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 0.99 confidence
+ML selected BPSK with 0.96 confidence
+ML selected BPSK with 0.82 confidence
+ML selected BPSK with 0.81 confidence
+ML selected BPSK with 0.80 confidence
+ML selected BPSK with 0.79 confidence
+ML selected BPSK with 0.79 confidence
+ML selected BPSK with 0.79 confidence
+ML selected BPSK with 0.79 confidence
+ML selected BPSK with 0.79 confidence
+ML selected BPSK with 0.79 confidence
+ML selected BPSK with 0.79 confidence
+ML selected BPSK with 0.79 confidence
+ML selected BPSK with 0.79 confidence
+ML selected BPSK with 0.79 confidence
+ML selected BPSK with 0.79 confidence
+ML selected BPSK with 0.78 confidence
+ML selected BPSK with 0.77 confidence
+ML selected BPSK with 0.65 confidence
+ML selected BPSK with 0.63 confidence
+ML selected BPSK with 0.59 confidence
+ML selected BPSK with 0.58 confidence
+ML selected BPSK with 0.55 confidence
+ML selected BPSK with 0.53 confidence
+ML selected BPSK with 0.46 confidence
+ML selected BPSK with 0.39 confidence
+Lower confidence (0.36) for QAM16, trying QPSK
+ML selected QPSK with 0.36 confidence
+Lower confidence (0.36) for QAM16, trying QPSK
+ML selected QPSK with 0.36 confidence
+Lower confidence (0.38) for QAM16, trying QPSK
+ML selected QPSK with 0.38 confidence
+Lower confidence (0.40) for QPSK, trying BPSK
+ML selected BPSK with 0.40 confidence
+Lower confidence (0.43) for QAM16, trying QPSK
+ML selected QPSK with 0.43 confidence
+Lower confidence (0.46) for QAM16, trying QPSK
+ML selected QPSK with 0.46 confidence
+Lower confidence (0.46) for QAM16, trying QPSK
+ML selected QPSK with 0.46 confidence
+Lower confidence (0.40) for QPSK, trying BPSK
+ML selected BPSK with 0.40 confidence
+Lower confidence (0.39) for QPSK, trying BPSK
+ML selected BPSK with 0.39 confidence
+Lower confidence (0.41) for QAM64, trying QAM16
+ML selected QAM16 with 0.41 confidence
+Lower confidence (0.42) for QAM64, trying QAM16
+ML selected QAM16 with 0.42 confidence
+Lower confidence (0.44) for QAM64, trying QAM16
+ML selected QAM16 with 0.44 confidence
+Lower confidence (0.46) for QAM64, trying QAM16
+ML selected QAM16 with 0.46 confidence
+Lower confidence (0.47) for QAM64, trying QAM16
+ML selected QAM16 with 0.47 confidence
+ML selected QAM64 with 0.50 confidence
+ML selected QAM64 with 0.51 confidence
+ML selected QAM64 with 0.52 confidence
+ML selected QAM64 with 0.52 confidence
+ML selected QAM64 with 0.51 confidence
+ML selected QAM64 with 0.52 confidence
+ML selected QAM64 with 0.52 confidence
+ML selected QAM64 with 0.52 confidence
+ML selected QAM64 with 0.52 confidence
+ML selected QAM64 with 0.52 confidence
+ML selected QAM64 with 0.53 confidence
+ML selected QAM64 with 0.54 confidence
+ML selected QAM64 with 0.54 confidence
+ML selected QAM64 with 0.55 confidence
+ML selected QAM64 with 0.57 confidence
+ML selected QAM64 with 0.59 confidence
+ML selected QAM64 with 0.63 confidence
+ML selected QAM64 with 0.68 confidence
+ML selected QAM64 with 0.73 confidence
+ML selected QAM64 with 0.77 confidence
+ML selected QAM64 with 0.81 confidence
+ML selected QAM64 with 0.84 confidence
+ML selected QAM64 with 0.85 confidence
+ML selected QAM64 with 0.86 confidence
+ML selected QAM64 with 0.87 confidence
+ML selected QAM64 with 0.87 confidence
+ML selected QAM64 with 0.87 confidence
+ML selected QAM64 with 0.87 confidence
+ML selected QAM64 with 0.87 confidence
+ML selected QAM64 with 0.87 confidence
+ML selected QAM64 with 0.87 confidence
+ML selected QAM64 with 0.87 confidence
+ML selected QAM64 with 0.87 confidence
+ML selected QAM64 with 0.87 confidence
+ML selected QAM64 with 0.87 confidence
+ML selected QAM64 with 0.87 confidence
+ML selected QAM64 with 0.87 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 0.99 confidence
+ML selected BPSK with 0.98 confidence
+ML selected BPSK with 0.93 confidence
+ML selected BPSK with 0.92 confidence
+ML selected BPSK with 0.92 confidence
+ML selected BPSK with 0.92 confidence
+ML selected BPSK with 0.92 confidence
+ML selected BPSK with 0.92 confidence
+ML selected BPSK with 0.92 confidence
+ML selected BPSK with 0.91 confidence
+ML selected BPSK with 0.91 confidence
+ML selected BPSK with 0.91 confidence
+ML selected BPSK with 0.91 confidence
+ML selected BPSK with 0.91 confidence
+ML selected BPSK with 0.91 confidence
+ML selected BPSK with 0.91 confidence
+ML selected BPSK with 0.91 confidence
+ML selected BPSK with 0.91 confidence
+ML selected BPSK with 0.91 confidence
+ML selected BPSK with 0.90 confidence
+ML selected BPSK with 0.89 confidence
+ML selected BPSK with 0.86 confidence
+ML selected BPSK with 0.81 confidence
+ML selected BPSK with 0.77 confidence
+ML selected BPSK with 0.72 confidence
+ML selected BPSK with 0.67 confidence
+ML selected BPSK with 0.64 confidence
+ML selected BPSK with 0.61 confidence
+ML selected BPSK with 0.59 confidence
+ML selected BPSK with 0.58 confidence
+ML selected BPSK with 0.57 confidence
+ML selected BPSK with 0.56 confidence
+ML selected BPSK with 0.55 confidence
+ML selected BPSK with 0.55 confidence
+ML selected BPSK with 0.55 confidence
+ML selected BPSK with 0.52 confidence
+ML selected BPSK with 0.49 confidence
+ML selected BPSK with 0.49 confidence
+ML selected BPSK with 0.49 confidence
+ML selected BPSK with 0.49 confidence
+ML selected BPSK with 0.48 confidence
+ML selected BPSK with 0.49 confidence
+Lower confidence (0.34) for QAM64, trying QAM16
+ML selected QAM16 with 0.34 confidence
+Lower confidence (0.32) for QAM64, trying QAM16
+ML selected QAM16 with 0.32 confidence
+Lower confidence (0.33) for QAM16, trying QPSK
+ML selected QPSK with 0.33 confidence
+Lower confidence (0.34) for QAM16, trying QPSK
+ML selected QPSK with 0.34 confidence
+Lower confidence (0.34) for QAM16, trying QPSK
+ML selected QPSK with 0.34 confidence
+Lower confidence (0.34) for QAM16, trying QPSK
+ML selected QPSK with 0.34 confidence
+Lower confidence (0.34) for QAM64, trying QAM16
+ML selected QAM16 with 0.34 confidence
+Lower confidence (0.33) for QAM64, trying QAM16
+ML selected QAM16 with 0.33 confidence
+Lower confidence (0.38) for QAM64, trying QAM16
+ML selected QAM16 with 0.38 confidence
+Lower confidence (0.36) for QAM64, trying QAM16
+ML selected QAM16 with 0.36 confidence
+Lower confidence (0.43) for QAM64, trying QAM16
+ML selected QAM16 with 0.43 confidence
+Lower confidence (0.49) for QAM64, trying QAM16
+ML selected QAM16 with 0.49 confidence
+ML selected QAM64 with 0.53 confidence
+ML selected QAM64 with 0.57 confidence
+ML selected QAM64 with 0.61 confidence
+ML selected QAM64 with 0.62 confidence
+ML selected QAM64 with 0.63 confidence
+ML selected QAM64 with 0.61 confidence
+ML selected QAM64 with 0.69 confidence
+ML selected QAM64 with 0.67 confidence
+ML selected QAM64 with 0.68 confidence
+ML selected QAM64 with 0.55 confidence
+ML selected QAM64 with 0.53 confidence
+ML selected QAM64 with 0.56 confidence
+ML selected QAM64 with 0.67 confidence
+Lower confidence (0.47) for QAM64, trying QAM16
+ML selected QAM16 with 0.47 confidence
+Lower confidence (0.48) for QAM64, trying QAM16
+ML selected QAM16 with 0.48 confidence
+Lower confidence (0.47) for QAM64, trying QAM16
+ML selected QAM16 with 0.47 confidence
+Lower confidence (0.47) for QAM64, trying QAM16
+ML selected QAM16 with 0.47 confidence
+Lower confidence (0.48) for QAM64, trying QAM16
+ML selected QAM16 with 0.48 confidence
+Lower confidence (0.46) for QAM64, trying QAM16
+ML selected QAM16 with 0.46 confidence
+Lower confidence (0.46) for QAM64, trying QAM16
+ML selected QAM16 with 0.46 confidence
+Lower confidence (0.48) for QAM64, trying QAM16
+ML selected QAM16 with 0.48 confidence
+ML selected QAM64 with 0.52 confidence
+ML selected QAM64 with 0.53 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 1.00 confidence
+ML selected BPSK with 0.99 confidence
+ML selected BPSK with 0.99 confidence
+ML selected BPSK with 0.99 confidence
+ML selected BPSK with 0.99 confidence
+ML selected BPSK with 0.99 confidence
+ML selected BPSK with 0.99 confidence
+ML selected BPSK with 0.98 confidence
+ML selected BPSK with 0.96 confidence
+ML selected BPSK with 0.55 confidence
+ML selected QPSK with 0.53 confidence
+ML selected QPSK with 0.53 confidence
+ML selected QPSK with 0.54 confidence
+ML selected QPSK with 0.54 confidence
+ML selected QPSK with 0.54 confidence
+ML selected QPSK with 0.54 confidence
+ML selected QPSK with 0.54 confidence
+ML selected QPSK with 0.54 confidence
+ML selected QPSK with 0.54 confidence
+ML selected QPSK with 0.55 confidence
+ML selected QPSK with 0.55 confidence
+ML selected QPSK with 0.55 confidence
+ML selected QPSK with 0.56 confidence
+ML selected QPSK with 0.57 confidence
+ML selected QPSK with 0.60 confidence
+ML selected QPSK with 0.66 confidence
+ML selected QPSK with 0.74 confidence
+ML selected QPSK with 0.80 confidence
+ML selected QPSK with 0.84 confidence
+ML selected QPSK with 0.86 confidence
+ML selected QPSK with 0.87 confidence
+ML selected QPSK with 0.87 confidence
+ML selected QPSK with 0.87 confidence
+ML selected QPSK with 0.87 confidence
+ML selected QPSK with 0.88 confidence
+ML selected QPSK with 0.88 confidence
+ML selected QPSK with 0.88 confidence
+ML selected QPSK with 0.88 confidence
+ML selected QPSK with 0.88 confidence
+ML training visualization saved to: results/ml_training_results.png
+ML selected BPSK with 0.99 confidence
+ML selected BPSK with 0.99 confidence
+ML selected BPSK with 1.00 confidence
+SNR: 5dB -> Selected: BPSK, Bits/Symbol: 1, Capacity: 2.01 bits/s/Hz
+  Small data (1000 bits): BPSK
+  Medium data (50000 bits): BPSK
+  Large data (200000 bits): BPSK
+ML selected BPSK with 0.62 confidence
+ML selected BPSK with 0.64 confidence
+ML selected BPSK with 0.66 confidence
+SNR: 10dB -> Selected: BPSK, Bits/Symbol: 1, Capacity: 3.81 bits/s/Hz
+  Small data (1000 bits): BPSK
+  Medium data (50000 bits): BPSK
+  Large data (200000 bits): BPSK
+ML selected BPSK with 0.98 confidence
+ML selected BPSK with 0.99 confidence
+ML selected BPSK with 1.00 confidence
+SNR: 15dB -> Selected: BPSK, Bits/Symbol: 1, Capacity: 4.90 bits/s/Hz
+  Small data (1000 bits): BPSK
+  Medium data (50000 bits): BPSK
+  Large data (200000 bits): BPSK
+ML selected BPSK with 0.96 confidence
+ML selected BPSK with 0.98 confidence
+ML selected BPSK with 1.00 confidence
+SNR: 20dB -> Selected: BPSK, Bits/Symbol: 1, Capacity: 6.98 bits/s/Hz
+  Small data (1000 bits): BPSK
+  Medium data (50000 bits): BPSK
+  Large data (200000 bits): BPSK
+ML selected BPSK with 0.87 confidence
+ML selected BPSK with 0.95 confidence
+ML selected BPSK with 1.00 confidence
+SNR: 25dB -> Selected: BPSK, Bits/Symbol: 1, Capacity: 7.97 bits/s/Hz
+  Small data (1000 bits): BPSK
+  Medium data (50000 bits): BPSK
+  Large data (200000 bits): BPSK
+ML selected QAM64 with 0.54 confidence
+ML selected BPSK with 0.56 confidence
+ML selected BPSK with 0.67 confidence
+SNR: 30dB -> Selected: BPSK, Bits/Symbol: 1, Capacity: 10.01 bits/s/Hz
+  Small data (1000 bits): QAM64
+  Medium data (50000 bits): BPSK
+  Large data (200000 bits): BPSK
+
+--- Testing Basic BPSK ---
+
+=== Testing Full System ===
+Preparing test image...
+Original image array shape: (256, 256)
+Modulating with BPSK and beamforming...
+Applying OFDM with improved synchronization...
+Applying channel effects with SNR: 25dB...
+Demodulating OFDM with improved synchronization...
+Received symbols shape before equalization: (524316, 4)
+Equalizing and demodulating...
+Full System BER: 0.279680
+Converting bits back to image...
+Converting bits back to image...
+Required bits: 524288, Received bits: 524316
+Truncating 28 bits
+Image Quality Metrics:
+psnr: 29.71
+ssim: 0.31
+mse: 69.59
+mae: 143.65
+
+--- Testing BPSK+CRC ---
+
+=== Testing Full System ===
+Preparing test image...
+Original image dimensions: 256x256, shape: (128, 128)
+Modulating with BPSK and beamforming...
+Applying OFDM with improved synchronization...
+Applying channel effects with SNR: 25dB...
+Demodulating OFDM with improved synchronization...
+Received symbols shape before equalization: (131092, 4)
+Equalizing and demodulating...
+Full System BER: 0.139818
+Converting bits back to image...
+Converting bits back to image...
+Received data size: 16387 bytes
+Invalid image dimensions: 34952x34952
+Image Quality Metrics:
+psnr: 28.03
+ssim: 0.06
+mse: 102.26
+mae: 137.48
+
+--- Testing BPSK+LDPC ---
+
+=== Testing Full System ===
+Preparing test image...
+LDPC encoding error: d_c must divide n for a regular LDPC matrix H.
+Original image dimensions: 256x256, shape: (128, 128)
+Modulating with BPSK and beamforming...
+Applying OFDM with improved synchronization...
+Applying channel effects with SNR: 25dB...
+Demodulating OFDM with improved synchronization...
+Received symbols shape before equalization: (131092, 4)
+Equalizing and demodulating...
+Full System BER: 0.139818
+Converting bits back to image...
+Converting bits back to image...
+Received data size: 16387 bytes
+Invalid image dimensions: 34952x34952
+Image Quality Metrics:
+psnr: 28.03
+ssim: 0.06
+mse: 102.26
+mae: 137.48
+
+--- Testing Traditional Adaptive ---
+
+=== Testing Full System ===
+Preparing test image...
+Original image dimensions: 64x64, shape: (64, 64)
+Traditional adaptive selected modulation: QPSK
+Modulating with QPSK and beamforming...
+Applying OFDM with improved synchronization...
+Applying channel effects with SNR: 25dB...
+Demodulating OFDM with improved synchronization...
+Received symbols shape before equalization: (16380, 4)
+Equalizing and demodulating...
+Full System BER: 0.307234
+Converting bits back to image...
+Converting bits back to image...
+Received data size: 4095 bytes
+Invalid image dimensions: 49280x32960
+Image Quality Metrics:
+psnr: 27.86
+ssim: 0.05
+mse: 106.44
+mae: 128.79
+
+--- Testing ML Adaptive ---
+
+=== Testing Full System ===
+Preparing test image...
+Original image dimensions: 64x64, shape: (64, 64)
+Training enhanced adaptive modulation model with realistic channels...
+Training with 4400 samples, validating with 1100 samples
+Enhanced model trained - Training accuracy: 1.0000, Validation accuracy: 0.9691
+Feature ranking for modulation selection:
+1. SNR (0.2924)
+2. Channel Capacity (0.1732)
+3. Condition Number (0.1501)
+4. Data Size (0.1043)
+5. Channel Gain (0.0948)
+6. Is Image (0.0781)
+7. Det Real (0.0386)
+8. Channel Std (0.0376)
+9. Det Imag (0.0310)
+ML selected BPSK with 0.75 confidence
+ML selected modulation: BPSK, Estimated BER: 0.000000
+Modulating with BPSK and beamforming...
+Applying OFDM with improved synchronization...
+Applying channel effects with SNR: 25dB...
+Demodulating OFDM with improved synchronization...
+Received symbols shape before equalization: (32812, 4)
+Equalizing and demodulating...
+Full System BER: 0.343807
+Converting bits back to image...
+Converting bits back to image...
+Received data size: 4102 bytes
+Invalid image dimensions: 43690x43690
+Image Quality Metrics:
+psnr: 27.90
+ssim: 0.34
+mse: 105.53
+mae: 137.03
+
+--- Testing ML Adaptive+LDPC ---
+
+=== Testing Full System ===
+Preparing test image...
+LDPC encoding error: d_c must divide n for a regular LDPC matrix H.
+Original image dimensions: 64x64, shape: (64, 64)
+Training enhanced adaptive modulation model with realistic channels...
+Training with 4400 samples, validating with 1100 samples
+Enhanced model trained - Training accuracy: 1.0000, Validation accuracy: 0.9691
+Feature ranking for modulation selection:
+1. SNR (0.2924)
+2. Channel Capacity (0.1732)
+3. Condition Number (0.1501)
+4. Data Size (0.1043)
+5. Channel Gain (0.0948)
+6. Is Image (0.0781)
+7. Det Real (0.0386)
+8. Channel Std (0.0376)
+9. Det Imag (0.0310)
+ML selected BPSK with 0.55 confidence
+ML selected modulation: BPSK, Estimated BER: 0.000000
+Modulating with BPSK and beamforming...
+Applying OFDM with improved synchronization...
+Applying channel effects with SNR: 25dB...
+Demodulating OFDM with improved synchronization...
+Received symbols shape before equalization: (32812, 4)
+Equalizing and demodulating...
+Full System BER: 0.343807
+Converting bits back to image...
+Converting bits back to image...
+Received data size: 4102 bytes
+Invalid image dimensions: 43690x43690
+Image Quality Metrics:
+psnr: 27.90
+ssim: 0.34
+mse: 105.53
+mae: 137.03
+
+=== Running Adaptive Modulation Comparison ===
+
+=== Comparing Adaptive Modulation Techniques ===
+
+--- Testing at SNR 15dB ---
+Running traditional adaptive modulation...
+
+=== Testing Full System ===
+Preparing test image...
+Original image dimensions: 64x64, shape: (64, 64)
+Traditional adaptive selected modulation: BPSK
+Modulating with BPSK and beamforming...
+Applying OFDM with improved synchronization...
+Applying channel effects with SNR: 15dB...
+Demodulating OFDM with improved synchronization...
+Received symbols shape before equalization: (32812, 4)
+Equalizing and demodulating...
+Full System BER: 0.363830
+Converting bits back to image...
+Converting bits back to image...
+Received data size: 4102 bytes
+Invalid image dimensions: 47786x43754
+Image Quality Metrics:
+psnr: 27.96
+ssim: 0.31
+mse: 103.90
+mae: 132.81
+Running ML adaptive modulation...
+
+=== Testing Full System ===
+Preparing test image...
+Original image dimensions: 64x64, shape: (64, 64)
+Training enhanced adaptive modulation model with realistic channels...
+Training with 4400 samples, validating with 1100 samples
+Enhanced model trained - Training accuracy: 1.0000, Validation accuracy: 0.9691
+Feature ranking for modulation selection:
+1. SNR (0.2924)
+2. Channel Capacity (0.1732)
+3. Condition Number (0.1501)
+4. Data Size (0.1043)
+5. Channel Gain (0.0948)
+6. Is Image (0.0781)
+7. Det Real (0.0386)
+8. Channel Std (0.0376)
+9. Det Imag (0.0310)
+ML selected BPSK with 1.00 confidence
+ML selected modulation: BPSK, Estimated BER: 0.041042
+Modulating with BPSK and beamforming...
+Applying OFDM with improved synchronization...
+Applying channel effects with SNR: 15dB...
+Demodulating OFDM with improved synchronization...
+Received symbols shape before equalization: (32812, 4)
+Equalizing and demodulating...
+Full System BER: 0.363830
+Converting bits back to image...
+Converting bits back to image...
+Received data size: 4102 bytes
+Invalid image dimensions: 47786x43754
+Image Quality Metrics:
+psnr: 27.96
+ssim: 0.31
+mse: 103.90
+mae: 132.81
+
+--- Testing at SNR 20dB ---
+Running traditional adaptive modulation...
+
+=== Testing Full System ===
+Preparing test image...
+Original image dimensions: 64x64, shape: (64, 64)
+Traditional adaptive selected modulation: BPSK
+Modulating with BPSK and beamforming...
+Applying OFDM with improved synchronization...
+Applying channel effects with SNR: 20dB...
+Demodulating OFDM with improved synchronization...
+Received symbols shape before equalization: (32812, 4)
+Equalizing and demodulating...
+Full System BER: 0.352127
+Converting bits back to image...
+Converting bits back to image...
+Received data size: 4102 bytes
+Invalid image dimensions: 43690x43690
+Image Quality Metrics:
+psnr: 27.87
+ssim: 0.32
+mse: 106.07
+mae: 137.05
+Running ML adaptive modulation...
+
+=== Testing Full System ===
+Preparing test image...
+Original image dimensions: 64x64, shape: (64, 64)
+Training enhanced adaptive modulation model with realistic channels...
+Training with 4400 samples, validating with 1100 samples
+/opt/anaconda3/lib/python3.11/site-packages/pyldpc/decoder.py:62: UserWarning: Decoding stopped before convergence. You may want
+                       to increase maxiter
+  warnings.warn("""Decoding stopped before convergence. You may want
+Enhanced model trained - Training accuracy: 1.0000, Validation accuracy: 0.9691
+Feature ranking for modulation selection:
+1. SNR (0.2924)
+2. Channel Capacity (0.1732)
+3. Condition Number (0.1501)
+4. Data Size (0.1043)
+5. Channel Gain (0.0948)
+6. Is Image (0.0781)
+7. Det Real (0.0386)
+8. Channel Std (0.0376)
+9. Det Imag (0.0310)
+ML selected BPSK with 0.91 confidence
+ML selected modulation: BPSK, Estimated BER: 0.000184
+Modulating with BPSK and beamforming...
+Applying OFDM with improved synchronization...
+Applying channel effects with SNR: 20dB...
+Demodulating OFDM with improved synchronization...
+Received symbols shape before equalization: (32812, 4)
+Equalizing and demodulating...
+Full System BER: 0.352127
+Converting bits back to image...
+Converting bits back to image...
+Received data size: 4102 bytes
+Invalid image dimensions: 43690x43690
+Image Quality Metrics:
+psnr: 27.87
+ssim: 0.32
+mse: 106.07
+mae: 137.05
+
+--- Testing at SNR 25dB ---
+Running traditional adaptive modulation...
+
+=== Testing Full System ===
+Preparing test image...
+Original image dimensions: 64x64, shape: (64, 64)
+Traditional adaptive selected modulation: QPSK
+Modulating with QPSK and beamforming...
+Applying OFDM with improved synchronization...
+Applying channel effects with SNR: 25dB...
+Demodulating OFDM with improved synchronization...
+Received symbols shape before equalization: (16380, 4)
+Equalizing and demodulating...
+Full System BER: 0.307234
+Converting bits back to image...
+Converting bits back to image...
+Received data size: 4095 bytes
+Invalid image dimensions: 49280x32960
+Image Quality Metrics:
+psnr: 27.86
+ssim: 0.05
+mse: 106.44
+mae: 128.79
+Running ML adaptive modulation...
+
+=== Testing Full System ===
+Preparing test image...
+Original image dimensions: 64x64, shape: (64, 64)
+Training enhanced adaptive modulation model with realistic channels...
+Training with 4400 samples, validating with 1100 samples
+Enhanced model trained - Training accuracy: 1.0000, Validation accuracy: 0.9691
+Feature ranking for modulation selection:
+1. SNR (0.2924)
+2. Channel Capacity (0.1732)
+3. Condition Number (0.1501)
+4. Data Size (0.1043)
+5. Channel Gain (0.0948)
+6. Is Image (0.0781)
+7. Det Real (0.0386)
+8. Channel Std (0.0376)
+9. Det Imag (0.0310)
+ML selected BPSK with 0.75 confidence
+ML selected modulation: BPSK, Estimated BER: 0.000000
+Modulating with BPSK and beamforming...
+Applying OFDM with improved synchronization...
+Applying channel effects with SNR: 25dB...
+Demodulating OFDM with improved synchronization...
+Received symbols shape before equalization: (32812, 4)
+Equalizing and demodulating...
+Full System BER: 0.343807
+Converting bits back to image...
+Converting bits back to image...
+Received data size: 4102 bytes
+Invalid image dimensions: 43690x43690
+Image Quality Metrics:
+psnr: 27.90
+ssim: 0.34
+mse: 105.53
+mae: 137.03
+
+--- Testing at SNR 30dB ---
+Running traditional adaptive modulation...
+
+=== Testing Full System ===
+Preparing test image...
+Original image dimensions: 64x64, shape: (64, 64)
+Traditional adaptive selected modulation: QAM16
+Modulating with QAM16 and beamforming...
+Applying OFDM with improved synchronization...
+Applying channel effects with SNR: 30dB...
+Demodulating OFDM with improved synchronization...
+Received symbols shape before equalization: (8164, 4)
+Equalizing and demodulating...
+Full System BER: 0.355187
+Converting bits back to image...
+Converting bits back to image...
+Received data size: 4082 bytes
+Invalid image dimensions: 26342x26342
+Image Quality Metrics:
+psnr: 27.91
+ssim: 0.11
+mse: 105.20
+mae: 138.54
+Running ML adaptive modulation...
+
+=== Testing Full System ===
+Preparing test image...
+Original image dimensions: 64x64, shape: (64, 64)
+Training enhanced adaptive modulation model with realistic channels...
+Training with 4400 samples, validating with 1100 samples
+Enhanced model trained - Training accuracy: 1.0000, Validation accuracy: 0.9691
+Feature ranking for modulation selection:
+1. SNR (0.2924)
+2. Channel Capacity (0.1732)
+3. Condition Number (0.1501)
+4. Data Size (0.1043)
+5. Channel Gain (0.0948)
+6. Is Image (0.0781)
+7. Det Real (0.0386)
+8. Channel Std (0.0376)
+9. Det Imag (0.0310)
+ML selected BPSK with 0.49 confidence
+ML selected modulation: BPSK, Estimated BER: 0.000000
+Modulating with BPSK and beamforming...
+Applying OFDM with improved synchronization...
+Applying channel effects with SNR: 30dB...
+Demodulating OFDM with improved synchronization...
+Received symbols shape before equalization: (32812, 4)
+Equalizing and demodulating...
+Full System BER: 0.340333
+Converting bits back to image...
+Converting bits back to image...
+Received data size: 4102 bytes
+Invalid image dimensions: 43754x43690
+Image Quality Metrics:
+psnr: 27.86
+ssim: 0.34
+mse: 106.34
+mae: 136.22
+
+=== Adaptive Modulation Comparison ===
+SNR    Trad BER     ML BER       Trad PSNR    ML PSNR     
+------------------------------------------------------------
+15     0.363830     0.363830     27.96        27.96       
+20     0.352127     0.352127     27.87        27.87       
+25     0.307234     0.343807     27.86        27.90       
+30     0.355187     0.340333     27.91        27.86       
+LDPC performance comparison saved to results/ldpc_performance.png
+LDPC performance visualization saved to: results/ldpc_performance.png
+
+=== Image Transmission Strategy Comparison ===
+Strategy                  BER        PSNR (dB)       SSIM      
+------------------------------------------------------------
+Basic BPSK                0.279680   29.71           0.3120    
+BPSK+CRC                  0.139818   28.03           0.0582    
+BPSK+LDPC                 0.139818   28.03           0.0582    
+Traditional Adaptive      0.307234   27.86           0.0530    
+ML Adaptive               0.343807   27.90           0.3377    
+ML Adaptive+LDPC          0.343807   27.90           0.3377    
+
+Summary plots saved to results/strategy_comparison.png
+ML training visualization saved to results/ml_training_results.png
