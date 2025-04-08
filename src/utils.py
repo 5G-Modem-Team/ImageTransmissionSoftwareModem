@@ -1,7 +1,8 @@
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont, ImageFilter, ImageEnhance
 import matplotlib.pyplot as plt
-from scipy.ndimage import uniform_filter
+from scipy.ndimage import uniform_filter 
+import pyldpc
 
 
 def generate_test_image(size=(256, 256)):
@@ -313,3 +314,49 @@ def save_transmission_results(original_image, received_image, results_dict,
     with open(os.path.join(output_dir, 'metrics.txt'), 'w') as f:
         for key, value in results_dict.items():
             f.write(f"{key}: {value}\n")
+
+def test_ldpc(n = 30, d_v = 2, d_c = 3):
+    # Using pyldpc library: https://pypi.org/project/pyldpc/
+    H, G = pyldpc.make_ldpc(n, d_v, d_c, systematic=True, sparse=True)
+    k = G.shape[1]
+    print("Redundant bits for coding:", k)
+
+    # Populate SNRs to test ldpc over
+    snr_values = np.linspace(0, 10)
+
+    bit_errors = []
+    v = np.arange(k) % 2 # message of k bits
+    V = np.tile(v, (40, 1)).T # repeat message 10 times
+
+    for snr in snr_values:
+        received = pyldpc.encode(G, V, snr) # encoded messages with gaussian noise
+        decoded = pyldpc.decode(H, received, snr) # decoded messages
+        error = 0
+        for i in range(40):
+            message = pyldpc.get_message(G, decoded[:,i])
+            error += abs(v - message).sum() / (k * 40)
+
+        bit_errors.append(error)
+
+    # Plot the results
+    plt.figure()
+    plt.plot(snr_values, bit_errors)
+    plt.title('LDPC Bit Error Rate vs SNR')
+    plt.xlabel('SNR (dB)')
+    plt.ylabel('Bit Error Rate')
+    plt.grid()
+    plt.show()
+
+
+    # don't worry about combining with the rest of the code (dont have time)
+    # Just use the built in functions to encode and decode
+    # It will add noise automatically
+    # don't worry about images
+    # just show graphs of how encoding improves BER for different SNR values
+    # You can use random data for the message
+    # In paper, talk about the functionality and how it works
+    # Don't need to have it integrated (we already did more than what was asked)
+
+
+if __name__ == "__main__":
+    test_ldpc()
